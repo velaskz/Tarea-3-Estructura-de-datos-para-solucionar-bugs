@@ -95,7 +95,7 @@ void procesarPalabra(const char *palabra, HashMap *mapaLibros, HashMap *mapaCont
 
 
 // FUNCIÓN ADDLINE
-void addLine(Libro *cont?enido, char *line, HashMap *mapaLibros,
+void addLine(Libro *contenido, char *line, HashMap *mapaLibros,
              HashMap *mapaConteoDePalabras) {
 
   contenido->lineas = (char **)realloc(
