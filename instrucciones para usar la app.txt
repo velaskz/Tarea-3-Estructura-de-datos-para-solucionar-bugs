@@ -1,0 +1,18 @@
+1. Cargar Documentos (Buena)
+    - Para cargar los documentos uno ingresa las id's de los libros hasta que se escriba fin.
+    - Por ejemplo si uno quiere ingresar un libro debería escribir 1.txt y se ingresará
+    - El libro 3.txt demora harto en cargar
+
+2. Mostrar documentos ordenados (parcialmente buena)
+    - Ya al ingresar libros deberían aparecer ordenados
+
+3. Buscar un libro por título (Mala)
+    - A diferencia de lo que dice el enunciado, por dificultades tecnicas se hizo que se ingresasen 
+      las palabras uno a uno hasta ingresar fin, similar a la 1.
+    - Se debrían mostrar todos los libros que contengan dicha palabra
+
+4. 
+
+5. Palabras más relevantes (Mala)
+
+6.

@@ -1,0 +1,29 @@
+void procesarPalabra(const char *palabra, HashMap *mapaLibros, HashMap *mapaConteoDePalabras) {
+    // Convertir la palabra a minúsculas y eliminar caracteres no deseados
+    int i, j = 0;
+    int longitud = strlen(palabra);
+    char palabraProcesada[longitud + 1];  // Crear un nuevo array para la palabra procesada
+
+    for (i = 0; i < longitud; i++) {
+        if (isalpha(palabra[i])) {  // Verificar si el carácter es una letra
+            palabraProcesada[j] = tolower(palabra[i]);  // Convertir a minúsculas
+            j++;
+        }
+    }
+
+    palabraProcesada[j] = '\0';  // Agregar el carácter nulo al final de la palabra procesada
+    printf("Esta es la palabra %s\n", palabraProcesada);
+
+    // Buscar la palabra en el mapa de conteo
+    Pair *conteoPair = searchMap(mapaConteoDePalabras, palabraProcesada);
+
+    if (conteoPair != NULL) {
+        // La palabra ya existe en el mapa, incrementar su frecuencia
+        int *frecuencia = (int *)conteoPair->value;
+        (*frecuencia)++;
+    } else {
+        // La palabra no existe en el mapa, añadirla con frecuencia 1
+          int frecuencia = 1;
+        insertMap(mapaConteoDePalabras, strdup(palabraProcesada), &frecuencia);
+    }
+}

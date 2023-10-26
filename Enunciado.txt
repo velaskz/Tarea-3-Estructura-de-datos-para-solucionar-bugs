@@ -1,0 +1,28 @@
+ Buscador de documentos
+
+La página del proyecto Gutenberg ofrece miles de libros gratuitos de manera legal. Descargué 100 libros y los almacené en esta [carpeta](https://drive.google.com/drive/folders/1KwQn19aMauyN1tsbX9PPo-u_xqSXHLO8) en GDrive.
+
+El nombre del archivo corresponde a un número identificador del libro.
+
+El título del libro se puede encontrar en la primera línea de cada archivo:
+
+
+La tarea consistirá en hacer una aplicación que permita indexar libros del proyecto Gutenberg. Además la aplicación debe permitir realizar distintos tipos de búsqueda. El menú deberá tener al menos las siguientes opciones:
+
+1. Cargar documentos El usuario coloca los nombres de una lista de archivos txt separados por espacio y la aplicación los carga *(opcionalmente el usuario podría poner el nombre de una carpeta para cargar todo su contenido)*.
+
+2. Mostrar documentos ordenados. La aplicación muestra los id y títulos de los libros ordenados por título. Además se muestra la cantidad de palabras y caracteres que tiene cada libro.
+
+3. Buscar un libro por título. El usuario coloca algunas palabras separadas por espacio y la aplicación muestra los títulos de libros que contienen todas las palabras.
+
+4. Palabras con mayor frecuencia. El usuario ingresa el id de un libro y la aplicación muestra las 10 palabras que se repiten con mayor frecuencia (indicando la cantidad de veces que aparece cada una de ellas). *(La frecuencia se calcula como la cantidad de veces que aparece una palabra dividida por el total de palabras en el libro.)*
+
+5. Palabras más relevantes.  El usuario ingresa el título de un libro y la aplicación muestra las 10 palabras más relevantes de este. Para calcular la relevancia de una palabra $p$ en un documento $d$ se debe aplicar la siguiente fórmula ([tf-idf](https://towardsdatascience.com/how-important-are-the-words-in-your-text-data-tf-idf-answers-6fdc733bb066)):
+
+$\frac{\text{veces que aparece }p\text{ en }d}{\text{número de palabras en }d}\cdot \log\left(\frac{\text{número de documentos}}{\text{número de documentos que tienen la palabra }p}\right)$
+
+6. Buscar por palabra. El usuario ingresa una palabra y la aplicación muestra los libros (id y título) que tienen la palabra en su contenido. Los libros deben ser ordenados por la relevancia de la palabra buscada.  *Por ejemplo, si busco “Jesús”, la biblia debería aparecer en primer lugar.*
+
+Si busco “mancha”, el Quijote debería salir en primer lugar.*
+
+7. Mostrar palabra en su contexto dentro del libro. El usuario ingresa el título de un libro y el de una palabra a buscar. La aplicación muestra las distintas apariciones de la palabra en el contexto del documento, es decir, para cada aparición, se muestran algunas palabras hacia atrás y hacia adelante de la palabra buscada (por ejemplo, la línea completa en la que aparece la palabra, o 5 palabras hacia atrás y 5 hacia adelante).
