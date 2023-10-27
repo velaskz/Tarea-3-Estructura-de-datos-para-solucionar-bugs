@@ -2,7 +2,7 @@
 #define funcionesAnswers_h
 
 void mostrarOpciones();
-void procesarPalabra();
+char* procesarPalabra();
 void readBook();
 void toLowerCase();
 void addLine();

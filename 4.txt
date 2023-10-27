@@ -11,18 +11,12 @@ Character set encoding: UTF-8
 
 *** START OF THE PROJECT GUTENBERG EBOOK THE KING JAMES BIBLE ***
 
-pachanga de lo cojone
-lol del epic games
-maincra mmmmm maincra
-shon peo 
-shon peo
-shon peo
-shon peo
-shon peo
-shon peo
-benjamin los loleros
-mojon que ordinario quien escribio esta wea? 
-ThIs iSn't goooooo"ood enOugh2
+This is a book that will be read by this program
+Will this be read by the program?
+I really don't know if this will work properly
+
+This isn't what I expected
+
 
 *** END OF THE PROJECT GUTENBERG EBOOK THE KING JAMES BIBLE ***
 

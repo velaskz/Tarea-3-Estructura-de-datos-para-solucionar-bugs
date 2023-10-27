@@ -31,6 +31,12 @@ typedef struct Libro {
 //                        Funciones del Menú                     |
 //----------------------------------------------------------------
 
+void toLowerCase(char *str) {
+  for (int i = 0; str[i]; i++) {
+    str[i] = tolower((unsigned char)str[i]);
+  }
+}
+
 //                                        (1)
 //
 
@@ -62,197 +68,175 @@ char *obtenerTitulo(FILE *file, const char *tituloArchivo) {
   return title;
 }
 
-void procesarPalabra(const char *palabra, HashMap *mapaLibros, HashMap *mapaConteoDePalabras) {
-    // Convertir la palabra a minúsculas y eliminar caracteres no deseados
+// Función para procesar una palabra (convertir a minúsculas y eliminar caracteres no deseados)
+char *procesarPalabra(const char *palabra) {
     int i, j = 0;
     int longitud = strlen(palabra);
-    char palabraProcesada[longitud + 1];  // Crear un nuevo array para la palabra procesada
+    char *palabraProcesada = (char *)malloc(longitud + 1);
+
+    if (palabraProcesada == NULL) {
+        fprintf(stderr, "Error: No se pudo asignar memoria para palabraProcesada.\n");
+        exit(EXIT_FAILURE);
+    }
 
     for (i = 0; i < longitud; i++) {
-        if (isalpha(palabra[i])) {  // Verificar si el carácter es una letra
-            palabraProcesada[j] = tolower(palabra[i]);  // Convertir a minúsculas
+        if (isalpha(palabra[i])) {
+            palabraProcesada[j] = tolower(palabra[i]);
             j++;
         }
     }
 
-    palabraProcesada[j] = '\0';  // Agregar el carácter nulo al final de la palabra procesada
-    printf("Esta es la palabra %s\n", palabraProcesada);
+    palabraProcesada[j] = '\0';
 
-    // Buscar la palabra en el mapa de conteo
-    Pair *conteoPair = searchMap(mapaConteoDePalabras, palabraProcesada);
+    return palabraProcesada;
+}
 
-    if (conteoPair == NULL) {
-        int frecuencia = 1;
-        insertMap(mapaConteoDePalabras, strdup(palabraProcesada), &frecuencia); // Copia la palabra procesada
-    } else {
-        int *frecuencia = (int *)conteoPair->value;
-        (*frecuencia)++;
+// Función para agregar una línea al contenido del libro y procesar las palabras
+void addLine(Libro *contenido, const char *line) {
+    // Aumenta el tamaño del array de líneas y guarda la nueva línea
+    contenido->lineas = (char **)realloc(contenido->lineas, (contenido->cantidadLineas + 1) * sizeof(char *));
+
+    if (contenido->lineas == NULL) {
+        fprintf(stderr, "Error: No se pudo asignar memoria para las líneas.\n");
+        exit(EXIT_FAILURE);
     }
 
-    //POR ALGUNA EXTRAÑA RAZON SI IMPRIME LA SGTE LINEA LA WEA EXPLOTA XD
-    //printf("Palabra procesada: %s, Frecuencia: %d\n", palabraProcesada, *((int *)conteoPair->value));
-}
+    contenido->lineas[contenido->cantidadLineas] = strdup(line);
 
-
-// FUNCIÓN ADDLINE
-void addLine(Libro *contenido, char *line, HashMap *mapaLibros,
-             HashMap *mapaConteoDePalabras) {
-
-  contenido->lineas = (char **)realloc(
-      contenido->lineas, (contenido->cantidadLineas + 1) * sizeof(char *));
-
-  if (contenido->lineas == NULL) {
-    fprintf(stderr, "Error: No se pudo asignar memoria.\n");
-    exit(EXIT_FAILURE);
-  }
-
-  contenido->lineas[contenido->cantidadLineas] = strdup(line);
-  if (contenido->lineas[contenido->cantidadLineas] == NULL) {
-    fprintf(stderr, "Error: No se pudo duplicar la línea.\n");
-    exit(EXIT_FAILURE);
-  }
-
-  contenido->cantidadLineas++;
-  contenido->cantidadCaracteres += strlen(line);
-
-  // Dividir la línea en palabras y contarlas
-  int numPalabras = 0;
-  char *token = strtok(line, " \t\n");
-
-  while (token != NULL) {
-    //printf("ATENTOS AL token: %s\n", token);
-    procesarPalabra(token, mapaLibros, mapaConteoDePalabras);
-      
-    numPalabras++;
-    token = strtok(NULL, " \t\n");
-  }
-  //printf("Número de palabras en esta línea: %d\n", numPalabras);
-  // Aumentar la cantidad de palabras en el libro
-  contenido->cantidadPalabras += numPalabras;
-}
-
-// Esta función lo que hace es que detecta el inicio del libro mediante una
-// marca de inicio. Termina de leerlo cuando encuantra la marca de fin.
-void readBook(FILE *file, const char *startMark, const char *endMark,
-              Libro *contenido, HashMap *mapaLibros,
-              HashMap *mapaConteoDePalabras) {
-  char line[MAXLINEAS];
-  int inContent = 0;
-
-  while (fgets(line, sizeof(line), file)) {
-    if (!inContent) {
-      if (strstr(line, startMark)) {
-        inContent = 1;
-      }
-    } else {
-      if (strstr(line, endMark)) {
-        break;
-      } else {
-        addLine(contenido, line, mapaLibros, mapaConteoDePalabras);
-      }
+    if (contenido->lineas[contenido->cantidadLineas] == NULL) {
+        fprintf(stderr, "Error: No se pudo duplicar la línea.\n");
+        exit(EXIT_FAILURE);
     }
-  }
+
+    contenido->cantidadLineas++;
+    contenido->cantidadCaracteres += strlen(line);
+
+    // Divide la línea en palabras y cuenta las palabras
+    int numPalabras = 0;
+    char *token = strtok(strdup(line), " \t\n"); // Duplica la línea para evitar problemas con strtok
+    int frecuencia = 1;
+
+    while (token != NULL) {
+        // Procesa la palabra y obtén una copia procesada
+        char *palabraProcesada = procesarPalabra(token);
+
+        // Aquí debes agregar el código para procesar y contar las palabras
+        // Por ejemplo, puedes utilizar el HashMap mapaConteoDePalabras para realizar el conteo
+
+        // Imprime información de la palabra procesada (esto es solo un ejemplo)
+        printf("Palabra procesada: %s, Frecuencia: %d\n", palabraProcesada, frecuencia);
+
+        // Libera la memoria asignada a palabraProcesada
+        free(palabraProcesada);
+
+        numPalabras++;
+        token = strtok(NULL, " \t\n");
+    }
+
+    // Aumenta la cantidad de palabras en el libro
+    contenido->cantidadPalabras += numPalabras;
 }
 
-// convierte a minusculas las palabras
-void toLowerCase(char *str) {
-  for (int i = 0; str[i]; i++) {
-    str[i] = tolower((unsigned char)str[i]);
-  }
+
+
+// Función para leer el libro desde un archivo
+void readBook(FILE *file, const char *startMark, const char *endMark, Libro *contenido) {
+    char line[MAXLINEAS];
+    int inContent = 0;
+
+    while (fgets(line, sizeof(line), file)) {
+        if (!inContent) {
+            if (strstr(line, startMark)) {
+                inContent = 1;
+            }
+        } else {
+            if (strstr(line, endMark)) {
+                break;
+            } else {
+                addLine(contenido, line);
+            }
+        }
+    }
 }
 
+// Función principal para cargar documentos
 void cargarDocumentos(HashMap *mapaLibros, HashMap *mapaIdes) {
-  char nombreArchivo[101];
-  const char *tituloTexto = "Title:";
-  const char *startMark = "*** START";
-  const char *endMark = "*** END ";
-  char
-      linea[1024]; // Tamaño máximo de una línea, ajústalo según tus necesidades
+    char nombreArchivo[101];
+    const char *tituloTexto = "Title:";
+    const char *startMark = "*** START";
+    const char *endMark = "*** END ";
+    char linea[1024];
 
-  printf("Ingrese el nombre del archivo de texto (o 'fin' para terminar la "
-         "carga):\n");
+    printf("Ingrese el nombre del archivo de texto (o 'fin' para terminar la carga):\n");
 
-  while (1) {
-    // Leer el nombre del archivo
-    scanf("%s", nombreArchivo);
-    if (strcmp(nombreArchivo, "fin") == 0) {
-      break; // Salir del bucle si el usuario ingresa 'fin'
+    while (1) {
+        scanf("%s", nombreArchivo);
+        if (strcmp(nombreArchivo, "fin") == 0) {
+            break;
+        }
+
+        FILE *archivo = fopen(nombreArchivo, "r");
+        if (archivo == NULL) {
+            printf("No se pudo abrir el archivo: '%s', inténtelo de nuevo...\n", nombreArchivo);
+            continue;
+        }
+
+        Libro *contenido = (Libro *)malloc(sizeof(Libro));
+        inicializarLibro(contenido);
+
+        char *titulo = obtenerTitulo(archivo, tituloTexto);
+
+        if (titulo) {
+            while (isspace(*titulo)) {
+                titulo++;
+            }
+            int len = strlen(titulo);
+            while (len > 0 && isspace(titulo[len - 1])) {
+                titulo[len - 1] = '\0';
+                len--;
+            }
+        }
+
+        contenido->titulo = titulo;
+
+        char nombreLibro[101];
+        strcpy(nombreLibro, nombreArchivo);
+        char *ext = strrchr(nombreLibro, '.');
+
+        if (ext != NULL) {
+            *ext = '\0';
+        }
+
+        strncpy(contenido->ID, nombreLibro, sizeof(contenido->ID) - 1);
+        contenido->ID[sizeof(contenido->ID) - 1] = '\0';
+
+        readBook(archivo, startMark, endMark, contenido);
+
+        // Aquí deberás agregar el código necesario para procesar y contar las palabras en el contenido del libro
+
+        // Almacena el contenido del libro en el mapaLibros con el nombre del archivo como clave
+        insertMap(mapaLibros, contenido->titulo, contenido);
+        insertMap(mapaIdes, contenido->ID, contenido);
+
+        printf("\nEl libro '%s' ha sido cargado con éxito!\n\n", contenido->titulo);
+
+        printf("Ingrese el nombre de otro archivo de texto (o 'fin' para terminar la carga):\n");
+
+        fclose(archivo);
     }
 
-    FILE *archivo = fopen(nombreArchivo, "r");
-    if (archivo == NULL) {
-      printf("No se pudo abrir el archivo: '%s', inténtelo de nuevo...\n",
-             nombreArchivo);
-      continue; // Continuar con el próximo archivo si no se puede abrir
-    }
-    Libro *contenido = (Libro *)malloc(sizeof(Libro));
-    inicializarLibro(contenido);
-
-    char *titulo = obtenerTitulo(archivo, tituloTexto);
-
-    // Eliminar espacios en blanco alrededor del título
-    if (titulo) {
-      while (isspace(*titulo)) {
-        titulo++;
-      }
-      int len = strlen(titulo);
-      while (len > 0 && isspace(titulo[len - 1])) {
-        titulo[len - 1] = '\0';
-        len--;
-      }
-    }
-
-    contenido->titulo = titulo;
-
-    // Extraer el nombre del archivo sin la extensión .txt
-    char nombreLibro[101];
-    strcpy(nombreLibro, nombreArchivo);
-    char *ext =
-        strrchr(nombreLibro, '.'); // Buscar la última aparición del punto
-    if (ext != NULL) {
-      *ext = '\0'; // Establecer el punto como final de la cadena
-    }
-
-    strncpy(contenido->ID, nombreLibro, sizeof(contenido->ID) - 1);
-    contenido->ID[sizeof(contenido->ID) - 1] = '\0';
-
-    // Lee y carga el contenido del libro
-    readBook(archivo, startMark, endMark, contenido, mapaLibros,
-             contenido->mapaConteoDePalabras);
-
-    // Prueba para ver si se guarda algo en este mapa
-    Pair *pair = firstMap(contenido->mapaConteoDePalabras);
-    while (pair != NULL) {
-      char *palabra = pair->key;
-      int *frecuencia = ((int *)pair->value);
-      printf("%s: %d\n", palabra, *frecuencia);
-      pair = nextMap(contenido->mapaConteoDePalabras);
-    }
-    // Almacena el contenido del libro como valor en el mapaLibros con el nombre
-    // del archivo como clave
-    insertMap(mapaLibros, contenido->titulo, contenido);
-    insertMap(mapaIdes, contenido->ID, contenido);
-
-    printf("\nEl libro '%s' ha sido cargado con éxito!\n\n", contenido->titulo);
-
-    printf("Ingresa el nombre de otro archivo de texto (o 'fin' para terminar "
-           "la carga):\n");
-
-    fclose(archivo);
-  }
-
-  printf("\n\nLa carga de libros ha sido finalizada!\n");
+    printf("\n\nLa carga de libros ha sido finalizada!\n");
 }
 
+// Función para liberar la memoria utilizada por el contenido del libro
 void liberarContenido(Libro *contenido) {
-  for (int i = 0; i < contenido->cantidadLineas; i++) {
-    free(contenido->lineas[i]);
-  }
-  free(contenido->lineas);
-  contenido->lineas = NULL;
-  contenido->cantidadLineas = 0;
+    for (int i = 0; i < contenido->cantidadLineas; i++) {
+        free(contenido->lineas[i]);
+    }
+    free(contenido->lineas);
+    contenido->lineas = NULL;
+    contenido->cantidadLineas = 0;
 }
-
 //                                        (2)
 // Árbol binario no guarda bien los datos, creo que los sobreescribe en vez de
 // guardar los títulos ya que queremos que se ordene mediante el orden

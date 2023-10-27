@@ -27,3 +27,138 @@ void procesarPalabra(const char *palabra, HashMap *mapaLibros, HashMap *mapaCont
         insertMap(mapaConteoDePalabras, strdup(palabraProcesada), &frecuencia);
     }
 }
+
+
+
+
+
+void procesarPalabra(const char *palabra, HashMap *mapaLibros, HashMap *mapaConteoDePalabras) {
+    // Convertir la palabra a minúsculas y eliminar caracteres no deseados
+    int i, j = 0;
+    int longitud = strlen(palabra);
+    char palabraProcesada[longitud + 1];  // Crear un nuevo array para la palabra procesada
+
+    for (i = 0; i < longitud; i++) {
+        if (isalpha(palabra[i])) {  // Verificar si el carácter es una letra
+            palabraProcesada[j] = tolower(palabra[i]);  // Convertir a minúsculas
+            j++;
+        }
+    }
+
+    palabraProcesada[j] = '\0';  // Agregar el carácter nulo al final de la palabra procesada
+
+    // Inicializa la frecuencia a 0
+    int frecuencia = 0;
+
+    // Buscar la palabra en el mapa de conteo
+    Pair *conteoPair = searchMap(mapaConteoDePalabras, palabraProcesada);
+
+    if (conteoPair != NULL) {
+        int *frecuenciaPtr = (int *)conteoPair->value;
+        frecuencia = *frecuenciaPtr;
+    }
+
+    // Actualiza la frecuencia
+    frecuencia++;
+
+    // Si la palabra no existía en el mapa, agrégala
+    if (conteoPair == NULL) {
+        insertMap(mapaConteoDePalabras, strdup(palabraProcesada), &frecuencia);
+    }
+
+    printf("La palabra %s tiene una frecuencia de: %i\n", palabraProcesada, frecuencia);
+}
+
+
+
+
+
+
+
+
+// Antes de entrar al bucle while para procesar palabras, crea un mapa para rastrear palabras procesadas
+HashMap *palabrasProcesadas = createMap(1001);
+
+while (token != NULL) {
+    // Procesa la palabra y obtén una copia procesada
+    char *palabraProcesada = procesarPalabra(token);
+
+    // Verifica si la palabra ya ha sido procesada en esta línea
+    if (searchMap(palabrasProcesadas, palabraProcesada) == NULL) {
+        // Agrega la palabra al conjunto de palabras procesadas en esta línea
+        insertMap(palabrasProcesadas, palabraProcesada, NULL);
+
+        // Buscar la palabra en el mapa de conteo
+        Pair *conteoPair = searchMap(mapaConteoDePalabras, palabraProcesada);
+
+        if (conteoPair == NULL) {
+            // La palabra no existe en el mapa, así que la insertamos con frecuencia 1
+            int frecuencia = 1;
+            insertMap(mapaConteoDePalabras, strdup(palabraProcesada), &frecuencia);
+        } else {
+            // La palabra ya existe en el mapa, aumenta la frecuencia
+            int *frecuencia = (int *)conteoPair->value;
+            (*frecuencia)++;
+        }
+
+        // Imprimir información de la palabra procesada
+        printf("Palabra procesada: %s, Frecuencia: %d\n", palabraProcesada, *frecuencia);
+    }
+
+    // Libera la memoria asignada a palabraProcesada
+    free(palabraProcesada);
+
+    numPalabras++;
+    token = strtok(NULL, " \t\n");
+}
+
+// Antes de salir del bucle, libera la memoria del mapa de palabras procesadas en esta línea
+clearMap(palabrasProcesadas);
+free(palabrasProcesadas);
+
+
+===================================================================
+😀\(￣︶￣*\))(* ￣3)(ε￣ *)( ´･･)ﾉ(._.`)(* ￣3)(ε￣ *)(*≧︶≦))(￣▽￣* )ゞψ(._. )>ψ(._. )>(❤´艸｀❤)(>'-'<)(>'-'<)(>'-'<)(>'-'<)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")                               AQUI SHON, METELA AQUI! 
+😀\(￣︶￣*\))(* ￣3)(ε￣ *)( ´･･)ﾉ(._.`)(* ￣3)(ε￣ *)(*≧︶≦))(￣▽￣* )ゞψ(._. )>ψ(._. )>(❤´艸｀❤)(>'-'<)(>'-'<)(>'-'<)(>'-'<)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)ლ(╹◡╹ლ)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)✍(◔◡◔)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(￣﹏￣；)(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")(¬_¬")
+===================================================================
+
+void addLine(Libro *contenido, char *line, TreeMap *mapaConteoDePalabras) {
+    // Otros miembros de la función...
+
+    // Dividir la línea en palabras y contarlas
+    int numPalabras = 0;
+    char *token = strtok(line, " \t\n");
+
+    while (token != NULL) {
+        // Procesa la palabra y obtén una copia procesada
+        char *palabraProcesada = procesarPalabra(token);
+
+        // Buscar la palabra en el mapa de conteo
+        Pair *conteoPair = searchTreeMap(mapaConteoDePalabras, palabraProcesada);
+
+        if (conteoPair == NULL) {
+            // La palabra no existe en el mapa, así que la insertamos con frecuencia 1
+            int frecuencia = 1;
+            insertTreeMap(mapaConteoDePalabras, strdup(palabraProcesada), &frecuencia);
+        } else {
+            // La palabra ya existe en el mapa, aumenta la frecuencia
+            int *frecuencia = (int *)conteoPair->value;
+            (*frecuencia)++;
+        }
+
+        // Imprimir información de la palabra procesada
+        printf("Palabra procesada: %s, Frecuencia: %d\n", palabraProcesada, *((int *)conteoPair->value));
+
+        // Libera la memoria asignada a palabraProcesada
+        free(palabraProcesada);
+
+        numPalabras++;
+        token = strtok(NULL, " \t\n");
+    }
+
+    // Aumentar la cantidad de palabras en el libro
+    contenido->cantidadPalabras += numPalabras;
+}
+
+
+   
