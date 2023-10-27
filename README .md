@@ -10,6 +10,9 @@ CORRECTO FUNCIONAMIENTO:
 ● La función 7 busca por palabras efectivamente dentro del contenido del libros especificado
 
 PROBLEMAS:
+
+● Al ingresar las palabras en el mapa conteodepalabras(funcion Addline) la funcion aumenta la frecuencia de la palabra solamente si repite en esa linea.
+
 ● El arbol binario en la funcion 2, no se muestran por pantalla todos los libros, muestra algunos pero los muestra ordenados, creemos que es un bug de la estructura de los mapas ordenados.
 
 ● La función 3 muestra los libros que no contienen la palabra y por problemas del mapa de palabras no puede mostrar correctamente los datos.

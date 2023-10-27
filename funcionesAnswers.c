@@ -38,8 +38,6 @@ void toLowerCase(char *str) {
 }
 
 //                                        (1)
-//
-
 // se inicializan variables que me permiten guardar los datos del libro
 void inicializarLibro(Libro *contenido) {
   contenido->titulo = NULL;
@@ -49,8 +47,6 @@ void inicializarLibro(Libro *contenido) {
   contenido->cantidadCaracteres = 0;
   contenido->mapaDePalabras = createMap(1001);
   contenido->mapaConteoDePalabras = createMap(1001);
-
-  // contenido->mapaConteoDePalabras = createTreeMap();
 }
 
 // extrae el título del txt
@@ -137,9 +133,6 @@ void addLine(Libro *contenido, const char *line) {
                 int *frecuencia = (int *)conteoPair->value;
                 (*frecuencia)++;
             }
-        // Imprime información de la palabra procesada (esto es solo un ejemplo)
-        printf("Palabra procesada: %s, Frecuencia: %d\n", palabraProcesada, frecuencia);
-
         // Libera la memoria asignada a palabraProcesada
         free(palabraProcesada);
 
@@ -151,7 +144,6 @@ void addLine(Libro *contenido, const char *line) {
     contenido->cantidadPalabras += numPalabras;
     }
 }
-
 
 // Función para leer el libro desde un archivo
 void readBook(FILE *file, const char *startMark, const char *endMark, Libro *contenido) {
@@ -173,7 +165,7 @@ void readBook(FILE *file, const char *startMark, const char *endMark, Libro *con
     }
 }
 
-// Función principal para cargar documentos
+//                                        (1)
 void cargarDocumentos(HashMap *mapaLibros, HashMap *mapaIdes) {
     char nombreArchivo[101];
     const char *tituloTexto = "Title:";
@@ -223,12 +215,9 @@ void cargarDocumentos(HashMap *mapaLibros, HashMap *mapaIdes) {
 
         strncpy(contenido->ID, nombreLibro, sizeof(contenido->ID) - 1);
         contenido->ID[sizeof(contenido->ID) - 1] = '\0';
-
         readBook(archivo, startMark, endMark, contenido);
-
-        // Aquí deberás agregar el código necesario para procesar y contar las palabras en el contenido del libro
-
-        // Almacena el contenido del libro en el mapaLibros con el nombre del archivo como clave
+        
+        // Se almacena el contenido del libro en el mapaLibros con el nombre del archivo como clave
         insertMap(mapaLibros, contenido->titulo, contenido);
         insertMap(mapaIdes, contenido->ID, contenido);
 
@@ -252,13 +241,6 @@ void liberarContenido(Libro *contenido) {
     contenido->cantidadLineas = 0;
 }
 //                                        (2)
-// Árbol binario no guarda bien los datos, creo que los sobreescribe en vez de
-// guardar los títulos ya que queremos que se ordene mediante el orden
-// alfabetico de estos
-int compareStrings(const void *a, const void *b) {
-  return strcmp((const char *)a, (const char *)b);
-}
-
 void mostrarLibro(void *data) {
   Libro *libro = (Libro *)data;
   printf("ID: %s\n", libro->ID);
@@ -296,8 +278,6 @@ void mostrarDocumentosOrdenados(HashMap *mapaLibros) {
 }
 
 //                                        (3)
-// muestra solo un libro :/
-
 int sizeList(List *lista) {
   int numElementos = 0;
   void *nodo = firstList(lista);
@@ -321,7 +301,7 @@ void buscarLibroXTitulo(HashMap *mapaLibros) {
   char *token = strtok(oracion, " "); // Dividir por espacios
 
   while (token != NULL) {
-    // Asegúrate de que la palabra no sea demasiado larga
+    
     if (strlen(token) > 100 - 1) {
       printf("La palabra es demasiado larga: %s\n", token);
     }
@@ -330,7 +310,7 @@ void buscarLibroXTitulo(HashMap *mapaLibros) {
     palabras[numPalabras] = (char *)malloc(strlen(token) + 1);
     if (palabras[numPalabras] == NULL) {
       printf("Error al asignar memoria.\n");
-      return; // Salir con error
+      return; 
     }
 
     // Copia la palabra en la lista
@@ -370,104 +350,7 @@ void buscarLibroXTitulo(HashMap *mapaLibros) {
         "No se encontraron libros que contengan todas las palabras clave.\n");
 }
 
-/*
-void buscarLibroXTitulo(HashMap *mapaLibros) {
-    char palabras[1000];
-    char delimitador= [];
-    printf("Ingrese palabras clave para buscar libros");
-    scanf("%999[^\n]s", palabras);
-
-    char *token = strtok(palabras, delimitador);
-    Libro *libro = (Libro *)pair->value;
-    HashMap *mapaDePalabras = libro->mapaDePalabras;
-    while(token != NULL){
-
-
-    }
-
-}*/
-
 //                                        (4)
-// Funciona pero mas o menos mal
-
-/*int greater_than_int(const void *a, const void *b) {
-    int num1 = *((int *)a);
-    int num2 = *((int *)b);
-
-    if (num1 < num2) return 1;
-    if (num1 > num2) return -1;
-    return 0;
-}
-
-void palabrasConMayorFrecuencia(HashMap* mapaLibros) {
-    char auxId[101];
-
-    printf("Ingrese el ID del libro:\n");
-    scanf("%s", auxId);
-
-    Pair *contentAux = searchMap(mapaLibros, auxId);
-    if (contentAux == NULL) {
-        printf("El libro con ID '%s' no se encontró.\n", auxId);
-        return;
-    }
-
-    Libro *auxContenido = (Libro *)contentAux->value;
-    HashMap *mapaConteoDePalabras = auxContenido->mapaConteoDePalabras;
-    int totalPalabras = auxContenido->cantidadPalabras;
-
-    if (mapaConteoDePalabras == NULL || totalPalabras == 0) {
-        printf("El libro no contiene palabras para analizar.\n");
-        return;
-    }
-
-    List *listaFrecuencias = createList();
-
-
-
-
-}*/
-
-/* // Crear una lista para almacenar pares de palabras y frecuencias
-    List *listaFrecuencias = createList();
-
-    // Recorrer el mapa de palabras para calcular las frecuencias
-    Pair *pair = firstMap(mapaDePalabras);
-    while (pair != NULL) {
-        char *palabra = pair->key;
-        int *frecuencia = (int *)pair->value;
-        double frecuenciaRelativa = (double)(*frecuencia) / totalPalabras;
-
-        // Crear una cadena formateada con la palabra y su frecuencia
-        char cadenaFrecuencia[256];
-        snprintf(cadenaFrecuencia, sizeof(cadenaFrecuencia), "%s (%d veces,
-   %.2f%%)", palabra, *frecuencia, frecuenciaRelativa * 100);
-
-        // Agregar la cadena formateada a la lista
-        pushBack(listaFrecuencias, cadenaFrecuencia);
-
-        pair = nextMap(mapaDePalabras);
-    }
-
-    // Ordenar la lista de frecuencias de mayor a menor
-    //ordenarLista(listaFrecuencias);
-
-    printf("Las 10 palabras con mayor frecuencia en el libro '%s' son:\n",
-   auxContenido->titulo); int contador = 0;
-
-    // Mostrar las 10 palabras con mayor frecuencia
-    while (contador < 10) {
-        char *frecuencia = (char *)popBack(listaFrecuencias);
-        if (frecuencia == NULL) {
-            break;
-        }
-        printf("%d. %s\n", contador + 1, frecuencia);
-        contador++;
-    }
-
-    // Liberar la lista de frecuencias
-    cleanList(listaFrecuencias);*/
-
-// Función para mostrar las palabras con mayor frecuencia en un libro
 void palabrasConMayorFrecuencia(HashMap *mapaIdes) {
   char auxtitulo[101];
 
@@ -535,7 +418,6 @@ void palabrasConMayorFrecuencia(HashMap *mapaIdes) {
 }
 
 //                                        (5)
-// Se queda pegado el programa
 void mostrarPalabrasRelevantes(HashMap *mapaLibros) {
   char titulo[101];
 
@@ -619,24 +501,21 @@ void mostrarPalabrasRelevantes(HashMap *mapaLibros) {
 }
 
 //                                        (6)
-// tiene bucle al momento de mostrar por pantalla cuando se ingresan más de 2
-// libros no muestra la relevancia bien
-
-/*void buscarXPalabra(HashMap *mapaLibros) {
+void buscarXPalabra(HashMap *mapaLibros) {
     char palabra[101];
     printf("Ingrese la palabra clave a buscar: ");
     scanf(" %100[^\n]", palabra);
 
     // Crear un TreeMap para almacenar los libros ordenados por relevancia
-    TreeMap *librosOrdenados = createTreeMap(compare); // Ordenar de mayor a
-menor relevancia
+    TreeMap *librosOrdenados = createTreeMap(lower_than_int); // Ordenar de mayor a menor relevancia
 
     Pair *contentAux = firstMap(mapaLibros);
 
-    // Recorrer el mapa de libros y calcular la relevancia de la palabra en cada
-libro while (contentAux != NULL) { Libro *auxContenido = (Libro
-*)contentAux->value; HashMap *mapaDePalabras = auxContenido->mapaDePalabras; int
-totalPalabrasLibro = auxContenido->cantidadPalabras;
+    // Recorrer el mapa de libros y calcular la relevancia de la palabra en cada libro
+    while (contentAux != NULL) {
+        Libro *auxContenido = (Libro *)contentAux->value;
+        HashMap *mapaDePalabras = auxContenido->mapaDePalabras;
+        int totalPalabrasLibro = auxContenido->cantidadPalabras;
 
         // Calcular la relevancia de la palabra en el libro
         Pair *palabraRelevancia = searchMap(mapaDePalabras, palabra);
@@ -654,8 +533,9 @@ totalPalabrasLibro = auxContenido->cantidadPalabras;
 
     // Mostrar los libros ordenados por relevancia
     Pair *pair = firstTreeMap(librosOrdenados);
-    printf("Libros con la palabra clave '%s', ordenados por relevancia:\n",
-palabra); while (pair != NULL) { Libro *libro = (Libro *)pair->value;
+    printf("Libros con la palabra clave '%s', ordenados por relevancia:\n", palabra);
+    while (pair != NULL) {
+        Libro *libro = (Libro *)pair->value;
         printf("ID: %s\n", libro->ID);
         printf("Título: %s\n", libro->titulo);
         printf("Relevancia: %.4lf\n", *((double *)pair->key));
@@ -667,10 +547,9 @@ palabra); while (pair != NULL) { Libro *libro = (Libro *)pair->value;
 
     // Liberar la memoria del TreeMap
     free(librosOrdenados);
-}*/
+}
 
 //                                        (7)
-// Lista (tiene un detalle en con las lineas pero cumple la función)
 void palabraEnContextoDelLibro(HashMap *mapaLibros) {
   char titulo[101];
   char palabra[101];
@@ -758,7 +637,6 @@ void mostrarOpciones() {
   printf("╚═════════════════════════════════════════════════════════════╝\n\n");
   printf("Seleccione una opción: ");
 }
-
 //
 void mostrarMenu(HashMap *mapaLibro, HashMap *mapaIdes) {
 
