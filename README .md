@@ -1,7 +1,7 @@
 INTEGRANTES:
-  Benjamin Velasquez, Aporte: 100/100.
-  Benjamin Rodriguez, Aporte: 100/100.
-  Sean Jamen        , Aporte: 100/100.
+  ● Benjamin Velasquez, Aporte: 100/100.
+  ● Benjamin Rodriguez, Aporte: 100/100.
+  ● Sean Jamen        , Aporte: 100/100.
 
 
 CORRECTO FUNCIONAMIENTO:
@@ -12,13 +12,13 @@ CORRECTO FUNCIONAMIENTO:
 PROBLEMAS:
 ● El arbol binario en la funcion 2, no se muestran por pantalla todos los libros, muestra algunos pero los muestra ordenados, creemos que es un bug de la estructura de los mapas ordenados.
 
-● La función 3 muestra los libros que no contienen la palabra
+● La función 3 muestra los libros que no contienen la palabra y por problemas del mapa de palabras no puede mostrar correctamente los datos.
 
-● La función 4 no reacciona al momento de probarla con muchos libros en el sistema 
+● La función 4 no reacciona al momento de probarla con muchos libros en el sistema y por problemas del mapa de palabras no puede mostrar correctamente los datos.
 
-● La función 5 no esta mostrando los datos correctos, pero si recorre todo lo necesario
+● La función 5 no esta mostrando los datos correctos, pero si recorre todo lo necesario y por problemas del mapa de palabras no puede mostrar correctamente los datos.
 
-● La función 6 entra en un bucle que calcula de mala manera la relevancia de las palabras porque creemos que lower_than_int no funciona bien con el codigo
+● La función 6 entra en un bucle que calcula de mala manera la relevancia de las palabras porque creemos que lower_than_int no funciona bien con el codigo y por problemas del mapa de palabras no puede mostrar correctamente los datos.
 
 
 DESCRIPCION DE FUNCIONES:

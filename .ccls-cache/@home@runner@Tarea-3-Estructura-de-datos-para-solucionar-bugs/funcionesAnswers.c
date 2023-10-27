@@ -114,15 +114,29 @@ void addLine(Libro *contenido, const char *line) {
     // Divide la línea en palabras y cuenta las palabras
     int numPalabras = 0;
     char *token = strtok(strdup(line), " \t\n"); // Duplica la línea para evitar problemas con strtok
-    int frecuencia = 1;
+    int frecuencia = 0;
 
     while (token != NULL) {
         // Procesa la palabra y obtén una copia procesada
         char *palabraProcesada = procesarPalabra(token);
 
-        // Aquí debes agregar el código para procesar y contar las palabras
-        // Por ejemplo, puedes utilizar el HashMap mapaConteoDePalabras para realizar el conteo
 
+        while (token != NULL) {
+            // Procesa la palabra y obtén una copia procesada
+            char *palabraProcesada = procesarPalabra(token);
+
+            // Busca la palabra en el mapa de conteo
+            Pair *conteoPair = searchMap(contenido->mapaConteoDePalabras, palabraProcesada);
+
+            if (conteoPair == NULL) {
+                // La palabra no existe en el mapa, así que la insertamos con frecuencia 1
+                frecuencia = 1;
+                insertMap(contenido->mapaConteoDePalabras, palabraProcesada, &frecuencia);
+            } else {
+                // La palabra ya existe en el mapa, aumenta la frecuencia
+                int *frecuencia = (int *)conteoPair->value;
+                (*frecuencia)++;
+            }
         // Imprime información de la palabra procesada (esto es solo un ejemplo)
         printf("Palabra procesada: %s, Frecuencia: %d\n", palabraProcesada, frecuencia);
 
@@ -131,12 +145,12 @@ void addLine(Libro *contenido, const char *line) {
 
         numPalabras++;
         token = strtok(NULL, " \t\n");
-    }
+        }
 
     // Aumenta la cantidad de palabras en el libro
     contenido->cantidadPalabras += numPalabras;
+    }
 }
-
 
 
 // Función para leer el libro desde un archivo
